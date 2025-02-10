@@ -1,76 +1,22 @@
-# Open Deep Research
+# Deep Research Proof-of-concept
 
-An AI-powered research assistant that performs iterative, deep research on any topic by combining search engines, web scraping, and large language models.
+A proof-of-concept of a workflow based on OpenAI Deep Research.
 
-The goal of this repo is to provide the simplest implementation of a deep research agent - e.g. an agent that can refine its research direction overtime and deep dive into a topic. Goal is to keep the repo size at <500 LoC so it is easy to understand and build on top of.
+If used OpenAI o3Mini for reasoning, and firecrawl to run SERP queries.
 
-## How It Works
+This code is based on [David Zhang](https://github.com/dzhng) work.
 
-```mermaid
-flowchart TB
-    subgraph Input
-        Q[User Query]
-        B[Breadth Parameter]
-        D[Depth Parameter]
-    end
+## Message Flow Diagram
+![Worflow](https://andrejacomesilvastorage.blob.core.windows.net/publico/images/Deep%20Research%20Workflow.png)
 
-    DR[Deep Research] -->
-    SQ[SERP Queries] -->
-    PR[Process Results]
-
-    subgraph Results[Results]
-        direction TB
-        NL((Learnings))
-        ND((Directions))
-    end
-
-    PR --> NL
-    PR --> ND
-
-    DP{depth > 0?}
-
-    RD["Next Direction:
-    - Prior Goals
-    - New Questions
-    - Learnings"]
-
-    MR[Markdown Report]
-
-    %% Main Flow
-    Q & B & D --> DR
-
-    %% Results to Decision
-    NL & ND --> DP
-
-    %% Circular Flow
-    DP -->|Yes| RD
-    RD -->|New Context| DR
-
-    %% Final Output
-    DP -->|No| MR
-
-    %% Styling
-    classDef input fill:#7bed9f,stroke:#2ed573,color:black
-    classDef process fill:#70a1ff,stroke:#1e90ff,color:black
-    classDef recursive fill:#ffa502,stroke:#ff7f50,color:black
-    classDef output fill:#ff4757,stroke:#ff6b81,color:black
-    classDef results fill:#a8e6cf,stroke:#3b7a57,color:black
-
-    class Q,B,D input
-    class DR,SQ,PR process
-    class DP,RD recursive
-    class MR output
-    class NL,ND results
-```
 
 ## Features
 
-- **Iterative Research**: Performs deep research by iteratively generating search queries, processing results, and diving deeper based on findings
-- **Intelligent Query Generation**: Uses LLMs to generate targeted search queries based on research goals and previous findings
-- **Depth & Breadth Control**: Configurable parameters to control how wide (breadth) and deep (depth) the research goes
-- **Smart Follow-up**: Generates follow-up questions to better understand research needs
-- **Comprehensive Reports**: Produces detailed markdown reports with findings and sources
-- **Concurrent Processing**: Handles multiple searches and result processing in parallel for efficiency
+- **Iterative Research**: Performs deep research by iteratively generating search queries, processing results, and diving deeper based on findings.
+- **Intelligent Query Generation**: Employs Large Language Models (LLMs) to create targeted search queries based on research objectives and prior discoveries.
+- **Depth & Breadth Control**: Offers configurable parameters to manage the scope (breadth) and detail (depth) of the research.
+- **Smart Follow-up**: Generates follow-up questions to better understand and refine research needs.
+- **Comprehensive Reports**: Produces detailed markdown reports with findings and sources.
 
 ## Requirements
 
@@ -126,42 +72,7 @@ The final report will be saved as `report.md` in your working directory.
 
 ### Concurrency
 
-If you have a paid version of Firecrawl or a local version, feel free to increase the `ConcurrencyLimit` in `deep-research.ts` so it runs a lot faster.
-
-If you have a free version, you may sometime run into rate limit errors, you can reduce the limit (but it will run a lot slower).
-
-### Custom endpoints and models
-
-There are 2 other optional env vars that lets you tweak the endpoint (for other OpenAI compatible APIs like OpenRouter or Gemini) as well as the model string.
-
-```bash
-OPENAI_ENDPOINT="custom_endpoint"
-OPENAI_MODEL="custom_model"
-```
-
-## How It Works
-
-1. **Initial Setup**
-
-   - Takes user query and research parameters (breadth & depth)
-   - Generates follow-up questions to understand research needs better
-
-2. **Deep Research Process**
-
-   - Generates multiple SERP queries based on research goals
-   - Processes search results to extract key learnings
-   - Generates follow-up research directions
-
-3. **Recursive Exploration**
-
-   - If depth > 0, takes new research directions and continues exploration
-   - Each iteration builds on previous learnings
-   - Maintains context of research goals and findings
-
-4. **Report Generation**
-   - Compiles all findings into a comprehensive markdown report
-   - Includes all sources and references
-   - Organizes information in a clear, readable format
+The code is optimized to use the free tier of [Firecrawl](https://www.firecrawl.dev/), ensuring the tool does not exceed the provided rate limitations.
 
 ## License
 
