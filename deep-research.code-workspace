@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"name": "deep-research",
+			"path": "."
+		},
+		{
+			"path": "../deep-research-prototype"
+		}
+	],
+	"settings": {}
+}
